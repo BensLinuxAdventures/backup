@@ -1,0 +1,41 @@
+#!/bin/bash
+# A simple backup script wrapper for duplicity.
+# Author - nixCraft  under GPL v2+
+# Edited by Programster
+# Edited by Ben
+# -----------------------------------------------------
+
+## Define VARS ##
+# Use gpg2 --list-keys to get your keys
+GPG_KEY='A3477C2A7881907ABBF2E55EBE9D66184D5E3FC0'
+
+# The path to where the files that we want to backup are
+SOURCE='/home/ben'
+
+# The path to where we want to store the backup
+TARGET='multi:///home/ben/.config/duplicity/config.json?mode=mirror&onfail=continue'
+
+# The full path to the duplicity program
+# you shouldn't need to change this if you are using Ubuntu
+DUPLICITY_CMD='/usr/bin/duplicity'
+
+# Specify how far back we want to be able to restore to
+# e.g. how long a backup lives in days before it is removed.
+BACKUP_LIFETIME=30
+
+# Specify how many days of iterative backups are allowed to
+# be taken before a full backup has to be taken
+DAYS_BETWEEN_FULL_BACKUPS=10
+
+####################
+
+
+## Removing old backups##
+echo "Removing old backups..."
+$DUPLICITY_CMD remove-older-than ${BACKUP_LIFETIME}D --asynchronous-upload --encrypt-key="${GPG_KEY}" ${TARGET}
+
+## Backup our files ##
+echo "Backing up files..."
+$DUPLICITY_CMD --force ${SOURCE} --asynchronous-upload --encrypt-key="${GPG_KEY}" ${TARGET}
+
+echo "done!"
