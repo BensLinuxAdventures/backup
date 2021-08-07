@@ -1,0 +1,10 @@
+[
+ {
+  "description": "Backup to FuntooServer",
+  "url": "scp://ben@funtooserver.bfr.pub//home/ben/backups"
+ },
+ {
+  "description": "Backup to Local NAS",
+  "url": "scp://192.168.0.2///volume1/BensBackups/XA1510"
+ }
+]
